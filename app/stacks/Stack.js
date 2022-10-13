@@ -8,7 +8,7 @@ import { ChooseLocation, Home } from '../screens'
 
 const Stacks = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
+    <Stack.Navigator >
         <Stack.Screen name='Home' component={Home}/>
         <Stack.Screen name='ChooseLocation' component={ChooseLocation}/>
     </Stack.Navigator>

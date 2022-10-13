@@ -1,10 +1,16 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import imagePath from '../../constants/imagePath';
+import { useNavigation } from '@react-navigation/native';
+import {API_KEY} from '@env'
 
 const Home = () => {
 
+ 
+  console.log(API_KEY);
+  const navigation=useNavigation()
     const [state, setState] = useState({
         //oldugum yerin kordinati
         pickUpCords: {
@@ -24,17 +30,22 @@ const Home = () => {
       const {dropLocationCords, pickUpCords} = state;
     
       const mapRef=useRef()
+
+      const onPressLocation=()=>{
+        navigation.navigate('ChooseLocation')
+      }
   return (
     <View style={styles.container}>
+      <View  style={styles.mapView}>
       <MapView 
       ref={mapRef}
       style={StyleSheet.absoluteFill} initialRegion={pickUpCords}>
-        <Marker coordinate={pickUpCords} />
-        <Marker coordinate={dropLocationCords} />
+        <Marker coordinate={pickUpCords} image={imagePath.icCurLoc} />
+        <Marker coordinate={dropLocationCords} image={imagePath.icGreenMarker} />
         <MapViewDirections
           origin={pickUpCords}
           destination={dropLocationCords}
-          apikey={'AIzaSyCKsywDvvL08D1IjV4hYTmgpX6DmCk2V44'}
+          apikey={API_KEY}
           strokeWidth={3}
           strokeColor="red"
           optimizeWaypoints={true}
@@ -50,6 +61,13 @@ const Home = () => {
           }}
         />
       </MapView>
+      </View>
+      <View style={styles.bottomCard}>
+        <Text>Where are you going?</Text>
+        <TouchableOpacity style={styles.btn} onPress={onPressLocation}>
+          <Text>Choose your Location</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -60,4 +78,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
       },
+    mapView:{
+      flex:1
+    },
+    bottomCard:{
+      backgroundColor:'white',
+      width:'100%',
+      padding:30,
+      borderTopEndRadius:24,
+      borderTopStartRadius:24
+    },
+    btn:{
+      backgroundColor:'white',
+      borderWidth:1,
+      borderRadius:4,
+      height:48,
+      alignItems:'center',
+      justifyContent:'center',
+      marginTop:16
+    }
 })
